@@ -1,0 +1,100 @@
+
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" name="viewport">
+    <link rel="shortcut icon" type="image/x-icon" href="/img/32logo_green.ico?t=1451964198000"/>
+    <title>blog管理后台登陆</title>
+    <link href="/css/team/document.css?t=1451964198000" rel="stylesheet" />
+    <script src="/static/js/jquery.min.js" type="text/javascript"></script>
+    <script src="/static/js/jquery.form.js" type="text/javascript"></script>
+    <script src="/static/js/sha1.js"></script>
+    <style>
+        body{ background: #f2f2f2;}
+        .d_button{ cursor: pointer;}
+        .auth_form{
+            width: 400px;
+            border: 1px solid #ccc;
+            background-color: #fff;
+            position: absolute;
+            top: 20%;
+            left: 50%;
+            margin-left: -220px;
+            padding: 20px;
+        }
+
+        .tit{
+            font-size: 18px;
+        }
+
+        .inp{
+            height: 30px;
+            width: 387px;
+            font-size: 14px;
+            padding: 5px;
+        }
+
+        .btn{
+            margin-top: 10px;
+            float: right;
+        }
+        .d_button{
+            background-color: #11a782;
+            border: 0 none;
+            border-radius: 4px;
+            color: #ffffff;
+            display: inline-block;
+            height: 40px;
+            outline: medium none;
+            padding-left: 15px;
+            padding-right: 15px;
+        }
+
+        .clear{
+            clear: both;
+        }
+    </style>
+</head>
+<body>
+<div class="auth_form">
+    <div class="shell">
+        <form action="/login" method="post" id="auth_form">
+            <input type="hidden" value="24501" name="vid" />
+            <div class="tit">
+                请输入登陆密码
+            </div>
+            <div style="margin-top: 10px;">
+                <input type="password" name="viewPwd" placeholder="登陆密码" class="inp"/>
+            </div>
+            <div class="btn">
+                <span id="error" style="color: #919191; font-size: 13px;"></span>
+                <input type="submit" value="登陆" class="d_button"/>
+            </div>
+        </form>
+    </div>
+</div>
+<script type="text/javascript">
+    $("#auth_form").ajaxForm({
+        beforeSerialize: function(){
+            var pwd = $("#auth_form input[name='viewPwd']").val();
+            if(pwd==""){
+                $("#error").html("请输入密码");
+                return false;
+            }
+            $("#auth_form input[name='viewPwd']").val(CryptoJS.SHA1(pwd));
+        },
+        dataType: "json",
+        success: function(data){
+            if(data.result){
+                window.location.reload();
+            }else{
+                $("#auth_form input[name='viewPwd']").val("");
+                $("#auth_form input[name='viewPwd']").focus();
+                $("#error").html(data.msg);
+            }
+        }
+    });
+</script>
+</body>
+</html>

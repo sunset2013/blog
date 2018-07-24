@@ -3,6 +3,7 @@ package routers
 import (
 	"github.com/astaxie/beego"
 	"blog/controllers/blog"
+	"blog/controllers/admin"
 )
 
 func init() {
@@ -14,4 +15,5 @@ func init() {
 
 
 	//后台路由
+	beego.Router("/login",&admin.AccountController{})
 }

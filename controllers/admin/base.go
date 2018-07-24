@@ -25,7 +25,6 @@ func (this *BaseController) Prepare() {
 	this.moduleName = "admin"
 	this.controllerName = strings.ToLower(controllerName[0 : len(controllerName)-10])
 	this.actionName = strings.ToLower(actionName)
-	this.checkPermission()
 }
 
 //登录状态验证
@@ -61,8 +60,6 @@ func (this *BaseController) display(tpl ...string) {
 		tplname = this.moduleName + "/" + this.controllerName + "_" + this.actionName + ".html"
 	}
 	this.Data["version"] = beego.AppConfig.String("AppVer")
-	this.Data["adminid"] = this.userid
-	this.Data["adminname"] = this.username
 	this.Layout = this.moduleName + "/layout.html"
 	this.TplName = tplname
 }
@@ -72,8 +69,6 @@ func (this *BaseController) showmsg(msg ...string) {
 	if len(msg) == 1 {
 		msg = append(msg, this.Ctx.Request.Referer())
 	}
-	this.Data["adminid"] = this.userid
-	this.Data["adminname"] = this.username
 	this.Data["msg"] = msg[0]
 	this.Data["redirect"] = msg[1]
 	this.Layout = this.moduleName + "/layout.html"
@@ -93,11 +88,6 @@ func (this *BaseController) getClientIp() string {
 	return s[0]
 }
 
-//权限验证
-func (this *BaseController) checkPermission() {
-	if this.userid != 1 && this.controllerName == "user" {
-		this.showmsg("抱歉，只有超级管理员才能进行该操作！")
-	}
-}
+
 
 
